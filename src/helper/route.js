@@ -10,12 +10,14 @@ const tplPath = path.join(__dirname, '../template/dir.tpl');
 //这里用同步，原因返回的模板在node启动时加载
 const source = fs.readFileSync(tplPath);
 const template = Handlebars.compile(source.toString());
+const mime = require('./mime');
 module.exports = async function (req, res, filePath) {
     try {
         const stats = await stat(filePath);
         res.statusCode = 200;
         if (stats.isFile()){
-            res.setHeader('Content-Type', 'text/plain');
+            const contentType = mime(filePath);
+            res.setHeader('Content-Type', contentType);
             fs.createReadStream(filePath).pipe(res);
         }else if (stats.isDirectory()) {
             res.setHeader('Content-Type', 'text/html');
