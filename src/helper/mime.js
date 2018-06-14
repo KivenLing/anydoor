@@ -29,4 +29,4 @@ module.exports = (filePath) => {
         extName = 'txt';
     }
     return mimeTypes[extName] || mimeTypes['txt'];
-}
+};
